@@ -288,9 +288,12 @@ void AShooterWeapon_Instant::DealDamage(const FHitResult& Impact, const FVector&
 	PointDmg.DamageTypeClass = InstantConfig.DamageType;
 	PointDmg.HitInfo = Impact;
 	PointDmg.ShotDirection = ShootDir;
-	PointDmg.Damage = InstantConfig.HitDamage;
+	PointDmg.StartLocation = StartToRay;
+	PointDmg.Damage = InstantConfig.HitDamRage;
 
-	Impact.GetActor()->TakeDamage(PointDmg.Damage, PointDmg, MyPawn->Controller, this);
+
+	FVector EndTrace = StartTrace + ShootDir * RayRange;
+	GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, COLLISION_WEAPON, TraceParams);
 }
 
 void AShooterWeapon_Instant::OnBurstFinished()
